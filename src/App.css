@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  background-color: #fafafa;
 }
 
 .App-logo {
@@ -14,14 +16,149 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background-color: #405de6;
+  padding: 2rem;
   color: white;
+  margin-bottom: 2rem;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.App-header p {
+  margin: 1rem 0 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.file-upload {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.file-input {
+  margin-bottom: 1rem;
+}
+
+.file-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.file-input input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #405de6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #3951d4;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.results {
+  margin-top: 2rem;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.result-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.result-section h3 {
+  margin-top: 0;
+  color: #262626;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  font-weight: normal;
+}
+
+.category-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.category-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.category-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.category-count {
+  font-size: 0.9rem;
+  color: #405de6;
+  font-weight: bold;
+}
+
+.list-container {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.instagram-link {
+  display: block;
+  padding: 0.5rem;
+  color: #405de6;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.instagram-link:hover {
+  background-color: #f0f2f5;
+  text-decoration: underline;
 }
 
 .App-link {
@@ -35,4 +172,131 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  text-align: left;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #262626;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0.5rem;
+}
+
+.close-button:hover {
+  color: #262626;
+}
+
+.instructions-section {
+  margin-bottom: 2rem;
+}
+
+.instructions-section h3 {
+  color: #262626;
+  margin-bottom: 1rem;
+}
+
+.instructions-section ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.instructions-section li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.instructions-section ul {
+  margin-left: 0;
+  margin-top: 0.5rem;
+  list-style-position: inside;
+}
+
+.instructions-section code {
+  background: #f5f5f5;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.privacy-notice {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 2rem;
+}
+
+.privacy-notice h3 {
+  color: #262626;
+  margin-bottom: 0.5rem;
+}
+
+.privacy-notice p {
+  margin: 0;
+  line-height: 1.5;
+  color: #666;
+}
+
+.privacy-notice strong {
+  color: #262626;
+}
+
+/* File Upload Styles */
+.file-upload {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.help-button {
+  background: #405de6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.help-button:hover {
+  background: #3951d4;
 }
