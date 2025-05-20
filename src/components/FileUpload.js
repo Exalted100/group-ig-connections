@@ -5,6 +5,7 @@ function FileUpload({ onProcess }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [partialData, setPartialData] = useState({ followers: null, following: null });
 
   const processFile = async (file) => {
     return new Promise((resolve, reject) => {
@@ -28,6 +29,22 @@ function FileUpload({ onProcess }) {
     });
   };
 
+  const processResults = (followers, following) => {
+    const mutuals = followers.filter(follower => 
+      following.some(following => following.label === follower.label)
+    );
+
+    const fans = followers.filter(follower => 
+      !following.some(following => following.label === follower.label)
+    );
+
+    const celebs = following.filter(following => 
+      !followers.some(follower => follower.label === following.label)
+    );
+
+    onProcess({ mutuals, fans, celebs });
+  };
+
   const handleFolderUpload = async (event) => {
     const files = event.target.files;
     if (!files.length) return;
@@ -36,8 +53,8 @@ function FileUpload({ onProcess }) {
     setError(null);
 
     try {
-      let followers = [];
-      let following = [];
+      let newFollowers = null;
+      let newFollowing = null;
 
       // Process all files in the folder
       for (const file of files) {
@@ -45,31 +62,32 @@ function FileUpload({ onProcess }) {
           const links = await processFile(file);
           
           if (file.name === 'followers_1.html') {
-            followers = links;
+            newFollowers = links;
           } else if (file.name === 'following.html') {
-            following = links;
+            newFollowing = links;
           }
         }
       }
 
-      if (!followers.length || !following.length) {
-        throw new Error('Could not find both followers_1.html and following.html files in the folder');
+      // Update partial data with any new files
+      const updatedPartialData = {
+        followers: newFollowers || partialData.followers,
+        following: newFollowing || partialData.following
+      };
+      setPartialData(updatedPartialData);
+
+      // Check if we have both files
+      if (updatedPartialData.followers && updatedPartialData.following) {
+        processResults(updatedPartialData.followers, updatedPartialData.following);
+        setPartialData({ followers: null, following: null }); // Reset for next upload
+      } else {
+        // Prompt for the missing file
+        if (!updatedPartialData.followers) {
+          setError('Please upload followers_1.html');
+        } else if (!updatedPartialData.following) {
+          setError('Please upload following.html');
+        }
       }
-
-      // Process the results
-      const mutuals = followers.filter(follower => 
-        following.some(following => following.label === follower.label)
-      );
-
-      const fans = followers.filter(follower => 
-        !following.some(following => following.label === follower.label)
-      );
-
-      const celebs = following.filter(following => 
-        !followers.some(follower => follower.label === following.label)
-      );
-
-      onProcess({ mutuals, fans, celebs });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -85,15 +103,32 @@ function FileUpload({ onProcess }) {
       >
         How to Get Your Instagram Data
       </button>
-      <input
-        type="file"
-        webkitdirectory="true"
-        directory="true"
-        onChange={handleFolderUpload}
-        disabled={isLoading}
-      />
+      <div className="file-input-container">
+        <input
+          type="file"
+          webkitdirectory="true"
+          directory="true"
+          multiple
+          onChange={handleFolderUpload}
+          disabled={isLoading}
+          id="file-input"
+        />
+        <label htmlFor="file-input" className="file-input-label">
+          Choose Files
+        </label>
+      </div>
       {isLoading && <div className="loading">Processing files...</div>}
       {error && <div className="error">{error}</div>}
+      {partialData.followers && !partialData.following && (
+        <div className="partial-upload">
+          ✓ followers_1.html uploaded successfully
+        </div>
+      )}
+      {!partialData.followers && partialData.following && (
+        <div className="partial-upload">
+          ✓ following.html uploaded successfully
+        </div>
+      )}
       <InstructionsModal 
         isOpen={showInstructions}
         onClose={() => setShowInstructions(false)}
