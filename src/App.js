@@ -14,7 +14,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>🔗 Instagram Connection Analyzer</h1>
-        <p>Upload your Instagram followers and following HTML files to analyze your connections</p>
+        <p>Upload your Instagram followers and following HTML files to analyze your connections!</p>
       </header>
       <main>
         <FileUpload onProcess={handleProcess} />
