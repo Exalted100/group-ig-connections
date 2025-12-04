@@ -17,10 +17,45 @@ function FileUpload({ onProcess }) {
         
         // Get all profile links
         const links = Array.from(doc.querySelectorAll('a[href*="instagram.com"]'))
-          .map(link => ({
-            label: link.textContent.trim(),
-            link: link.href
-          }));
+          .map(link => {
+            // Extract username from href URL (more reliable)
+            // Instagram URLs can be:
+            // - https://www.instagram.com/username/ (followers format)
+            // - https://www.instagram.com/_u/username (following format)
+            const href = link.href || link.getAttribute('href') || '';
+            let username = null;
+            
+            // Try to match the _u/username pattern first (for following.html)
+            const uPatternMatch = href.match(/instagram\.com\/_u\/([^\/\?]+)/);
+            if (uPatternMatch) {
+              username = uPatternMatch[1];
+            } else {
+              // Try standard username pattern (for followers.html)
+              const standardMatch = href.match(/instagram\.com\/([^\/\?]+)/);
+              if (standardMatch && standardMatch[1] !== '_u') {
+                username = standardMatch[1];
+              }
+            }
+            
+            // Fallback to textContent if URL extraction fails
+            if (!username) {
+              username = link.textContent.trim();
+            }
+            
+            // If still no username, try to find it in nested elements
+            if (!username || username === '') {
+              const nestedText = link.querySelector('div, span, p');
+              if (nestedText) {
+                username = nestedText.textContent.trim();
+              }
+            }
+            
+            return {
+              label: username || '',
+              link: href
+            };
+          })
+          .filter(link => link.label && link.label !== ''); // Filter out empty usernames
 
         resolve(links);
       };
