@@ -26,12 +26,12 @@ function FileUpload({ onProcess }) {
             let username = null;
             
             // Try to match the _u/username pattern first (for following.html)
-            const uPatternMatch = href.match(/instagram\.com\/_u\/([^\/\?]+)/);
+            const uPatternMatch = href.match(/instagram\.com\/_u\/([^/?]+)/);
             if (uPatternMatch) {
               username = uPatternMatch[1];
             } else {
               // Try standard username pattern (for followers.html)
-              const standardMatch = href.match(/instagram\.com\/([^\/\?]+)/);
+              const standardMatch = href.match(/instagram\.com\/([^/?]+)/);
               if (standardMatch && standardMatch[1] !== '_u') {
                 username = standardMatch[1];
               }
